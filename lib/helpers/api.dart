@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:tokokita/helpers/user_info.dart';
 import 'app_exception.dart';
 
-class api {
+class Api {
   Future<dynamic> post(dynamic url, dynamic data) async {
     var token = await UserInfo().getToken();
     var responseJson;
