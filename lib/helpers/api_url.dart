@@ -3,6 +3,8 @@ class ApiUrl {
 
   static const String registrasi = baseUrl + '/registrasi';
   static const String login = baseUrl + '/login';
+
+  //Produk
   static const String listProduk = baseUrl + '/produk';
   static const String createProduk = baseUrl + '/produk';
 
