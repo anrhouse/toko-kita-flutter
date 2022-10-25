@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:tokokita/bloc/registrasi_bloc.dart';
+import 'package:tokokita/widget/success_dialog.dart';
+import 'package:tokokita/widget/warning_dialog.dart';
 
 class RegistrasiPages extends StatefulWidget {
   const RegistrasiPages({Key? key}) : super(key: key);
@@ -123,7 +123,44 @@ class _RegistrasiPagesState extends State<RegistrasiPages> {
     return ElevatedButton(
         onPressed: () {
           var validate = _formkey.currentState!.validate();
+          if (validate) {
+            if (!_isLoading) _submit();
+          }
         },
         child: const Text("Registrasi"));
+  }
+
+  //submit
+  void _submit() {
+    _formkey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+    registrasiBloc
+        .registrasi(
+            nama: _namaTextboxController.text,
+            email: _emailTextboxController.text,
+            password: _passwordTextboxController.text)
+        .then((value) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => SuccessDialog(
+                description: "Registrasi berhasil, silahkan login",
+                okClick: () {
+                  Navigator.pop(context);
+                },
+              ));
+    }, onError: (error) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => const WarningDialog(
+                description: "Registrasi gagal, silahkan coba lagi",
+              ));
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 }
